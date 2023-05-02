@@ -9,9 +9,9 @@ import com.example.collection_album_manager.ui.navigation.NavigationRoute
 
 
 interface NavigationParameters3<T1, T2, T3> {
-    fun argument1(): T1
-    fun argument2(): T2
-    fun argument3(): T3
+    fun component1(): T1
+    fun component2(): T2
+    fun component3(): T3
 }
 
 
@@ -32,9 +32,9 @@ abstract class NavigationRoute3<T1, T2, T3, Parameters : NavigationParameters3<T
 ) {
     open fun toDestination(parameters: Parameters): String = super.toDestination(
         mapOf(
-            navArgument1.instance to parameters.argument1(),
-            navArgument2.instance to parameters.argument2(),
-            navArgument3.instance to parameters.argument3(),
+            navArgument1.instance to parameters.component1(),
+            navArgument2.instance to parameters.component2(),
+            navArgument3.instance to parameters.component3(),
         )
     )
 }

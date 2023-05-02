@@ -43,7 +43,6 @@ fun AlbumListScreenNavigationGraph.navigation(
                     )
                 )
             },
-//            navigateUp = navController::navigateUp
         )
         AlbumViewScreenNavigationDestination.composable(
             this,

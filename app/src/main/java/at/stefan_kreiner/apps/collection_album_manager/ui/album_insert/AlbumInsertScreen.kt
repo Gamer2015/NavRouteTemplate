@@ -12,6 +12,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -42,11 +43,15 @@ fun AlbumInsertScreen(
 
     Scaffold(topBar = {
         TopAppBar(title = {
-            Text(text = "New Album")
+            Text(text = "New Album", color = MaterialTheme.colorScheme.onPrimary)
         }, colors = TopAppBarDefaults.smallTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary
         ), navigationIcon = {
-            IconButton(onClick = navigateUp) {
+            IconButton(
+                onClick = navigateUp, colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Back",
@@ -75,7 +80,8 @@ fun AlbumInsertScreen(
                     Text(text = stringResource(R.string.collection_album_name_textfield_label))
                 },
             )
-            OutlinedTextField(value = itemCountInput,
+            OutlinedTextField(
+                value = itemCountInput,
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
                 onValueChange = {

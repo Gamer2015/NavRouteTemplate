@@ -10,6 +10,9 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
@@ -17,6 +20,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -27,21 +32,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlbumListScreen(
     navigateToAlbumInsert: () -> Unit,
     navigateToAlbumView: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val uiActiveState = remember {
-        MutableTransitionState(false).apply {
-            // Start the animation immediately.
-            targetState = true
-        }
-    }
-
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -51,8 +52,7 @@ fun AlbumListScreen(
                         text = "Your Albums",
                         color = MaterialTheme.colorScheme.onPrimary,
                     )
-                },
-                colors = TopAppBarDefaults.smallTopAppBarColors(
+                }, colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 )
             )
@@ -66,17 +66,31 @@ fun AlbumListScreen(
             }
         },
     ) { paddingValues ->
-        Column(
-            modifier = Modifier.padding(paddingValues),
+        LazyColumn(
+            modifier = Modifier.padding(
+                paddingValues
+            ),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Button(
-                onClick = {
-                    navigateToAlbumView(123)
-                },
-            ) {
-                Text("Change Screen")
+            items(100) {
+                NavigationDrawerItem(modifier = Modifier.padding(
+                    top = 8.dp, start = 4.dp, end = 4.dp
+                ), colors = NavigationDrawerItemDefaults.colors(
+                    unselectedContainerColor = MaterialTheme.colorScheme.secondaryContainer
+                ), label = {
+                    Text(
+                        text = "Test Test Test Test Test Test Test $it",
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }, badge = {
+                    Text(
+                        text = "$it / 150",
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    )
+                }, selected = false, onClick = { navigateToAlbumView(it.toLong()) })
             }
         }
     }

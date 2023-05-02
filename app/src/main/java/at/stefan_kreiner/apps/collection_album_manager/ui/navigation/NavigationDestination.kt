@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import com.example.collection_album_manager.ui.navigation.NavigationRoute
 
 
-abstract class NavigationDestination : NavigationGraphNode()
+abstract class NavigationDestination : NavigationGraphNode
 
 
 fun NavGraphBuilder.composable(

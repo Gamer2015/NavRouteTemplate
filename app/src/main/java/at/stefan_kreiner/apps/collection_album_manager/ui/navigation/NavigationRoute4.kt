@@ -8,30 +8,42 @@ import androidx.navigation.navOptions
 import com.example.collection_album_manager.ui.navigation.NavigationRoute
 
 
-interface NavigationParameters1<T1> {
+interface NavigationParameters4<T1, T2, T3, T4> {
     fun component1(): T1
+    fun component2(): T2
+    fun component3(): T3
+    fun component4(): T4
 }
 
 
-class NavigationRoute1<T1, Parameters : NavigationParameters1<T1>>(
+abstract class NavigationRoute4<T1, T2, T3, T4, Parameters : NavigationParameters4<T1, T2, T3, T4>>(
     private val navArgument1: TypedNamedNavArgument<T1>,
-    path: UniversalResourceIdentifierPath,
+    private val navArgument2: TypedNamedNavArgument<T2>,
+    private val navArgument3: TypedNamedNavArgument<T3>,
+    private val navArgument4: TypedNamedNavArgument<T4>,
+    path: UniversalResourceIdentifierPath
 ) : NavigationRoute(
     arguments = listOf(
         navArgument1,
+        navArgument2,
+        navArgument3,
+        navArgument4,
     ).map {
         it.instance
     },
     path = path,
 ) {
-    fun toDestination(parameters: Parameters): String = super.toDestination(
+    open fun toDestination(parameters: Parameters): String = super.toDestination(
         mapOf(
             navArgument1.instance to parameters.component1(),
+            navArgument2.instance to parameters.component2(),
+            navArgument3.instance to parameters.component3(),
+            navArgument4.instance to parameters.component4(),
         )
     )
 }
 
-fun <T1, Parameters : NavigationParameters1<T1>> NavigationRoute1<T1, Parameters>.navigateWith(
+fun <T1, T2, T3, T4, Parameters : NavigationParameters4<T1, T2, T3, T4>> NavigationRoute4<T1, T2, T3, T4, Parameters>.navigateWith(
     navController: NavController,
     parameters: Parameters,
     builder: NavOptionsBuilder.() -> Unit = {},
@@ -41,7 +53,7 @@ fun <T1, Parameters : NavigationParameters1<T1>> NavigationRoute1<T1, Parameters
     )
 }
 
-fun <T1, Parameters : NavigationParameters1<T1>> NavigationRoute1<T1, Parameters>.navigateWith(
+fun <T1, T2, T3, T4, Parameters : NavigationParameters4<T1, T2, T3, T4>> NavigationRoute4<T1, T2, T3, T4, Parameters>.navigateWith(
     navController: NavController,
     parameters: Parameters,
     navOptions: NavOptions? = null,
@@ -55,28 +67,3 @@ fun <T1, Parameters : NavigationParameters1<T1>> NavigationRoute1<T1, Parameters
         navigatorExtras = navigatorExtras,
     )
 }
-
-//fun <T1, Parameters : NavigationParameters1<T1>> NavController.navigate(
-//    route: NavigationRoute1<T1, Parameters>,
-//    parameters: Parameters,
-//    builder: NavOptionsBuilder.() -> Unit = {},
-//) {
-//    navigate(
-//        route = route, parameters = parameters, navOptions = navOptions(builder)
-//    )
-//}
-//
-//fun <T1, Parameters : NavigationParameters1<T1>> NavController.navigate(
-//    route: NavigationRoute1<T1, Parameters>,
-//    parameters: Parameters,
-//    navOptions: NavOptions? = null,
-//    navigatorExtras: Navigator.Extras? = null,
-//) {
-//    navigate(
-//        route = route.toDestination(
-//            parameters = parameters
-//        ),
-//        navOptions = navOptions,
-//        navigatorExtras = navigatorExtras,
-//    )
-//}

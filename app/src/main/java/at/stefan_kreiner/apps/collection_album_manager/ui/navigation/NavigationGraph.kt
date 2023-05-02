@@ -6,7 +6,7 @@ import androidx.navigation.navigation
 
 abstract class NavigationGraph(
     val startDestination : NavigationGraphNode,
-) : NavigationGraphNode()
+) : NavigationGraphNode
 
 
 fun NavGraphBuilder.navigation(

@@ -8,6 +8,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -25,11 +26,13 @@ fun AlbumViewScreen(
     Scaffold(
         topBar = {
             TopAppBar(title = {
-                Text(text = "Item id: $itemId")
+                Text(text = "Item id: $itemId", color = MaterialTheme.colorScheme.onPrimary)
             }, colors = TopAppBarDefaults.smallTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primary
             ), navigationIcon = {
-                IconButton(onClick = navigateUp) {
+                IconButton(onClick = navigateUp, colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = "Back",
