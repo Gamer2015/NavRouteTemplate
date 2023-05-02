@@ -58,23 +58,11 @@ fun AlbumListScreen(
             )
         },
         floatingActionButton = {
-            AnimatedVisibility(
-                visibleState = uiActiveState,
-                enter = scaleIn(
-                    animationSpec = tween(durationMillis = 1000, easing = LinearEasing),
-                    transformOrigin = TransformOrigin(1f, 1f)
-                ),
-                exit = scaleOut(
-                    animationSpec = tween(durationMillis = 1000, easing = LinearEasing),
-                    transformOrigin = TransformOrigin(1f, 1f)
-                ),
-            ) {
-                FloatingActionButton(onClick = navigateToAlbumInsert) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = null,
-                    )
-                }
+            FloatingActionButton(onClick = navigateToAlbumInsert) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = null,
+                )
             }
         },
     ) { paddingValues ->

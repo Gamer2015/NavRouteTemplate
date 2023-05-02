@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import at.stefan_kreiner.apps.collection_album_manager.ui.album_insert.AlbumInsertScreenNavigationDestination
+import at.stefan_kreiner.apps.collection_album_manager.ui.album_insert.composable
 import at.stefan_kreiner.apps.collection_album_manager.ui.album_view.AlbumViewScreenNavigationDestination
 import at.stefan_kreiner.apps.collection_album_manager.ui.album_view.AlbumViewScreenNavigationParameters
 import at.stefan_kreiner.apps.collection_album_manager.ui.album_view.composable
@@ -45,6 +46,10 @@ fun AlbumListScreenNavigationGraph.navigation(
 //            navigateUp = navController::navigateUp
         )
         AlbumViewScreenNavigationDestination.composable(
+            this,
+            navigateUp = navController::navigateUp
+        )
+        AlbumInsertScreenNavigationDestination.composable(
             this,
             navigateUp = navController::navigateUp
         )
