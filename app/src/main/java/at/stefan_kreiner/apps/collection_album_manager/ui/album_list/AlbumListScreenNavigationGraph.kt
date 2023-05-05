@@ -37,20 +37,26 @@ fun AlbumListScreenNavigationGraph.navigation(
             navigateToAlbumView = { itemId ->
                 Log.d("Navigation", "Item id: $itemId")
                 AlbumViewScreenNavigationDestination.route.navigateWith(
-                    navController = navController,
-                    AlbumViewScreenNavigationParameters(
+                    navController = navController, AlbumViewScreenNavigationParameters(
                         itemId = itemId
                     )
                 )
             },
         )
         AlbumViewScreenNavigationDestination.composable(
-            this,
-            navigateUp = navController::navigateUp
+            this, navigateUp = navController::navigateUp
         )
         AlbumInsertScreenNavigationDestination.composable(
             this,
-            navigateUp = navController::navigateUp
-        )
+            navigateUp = navController::navigateUp,
+            navigateToAlbumById = {
+                AlbumViewScreenNavigationDestination.route.navigateWith(
+                    navController, AlbumViewScreenNavigationParameters(it)
+                ) {
+                    popUpTo(route = AlbumInsertScreenNavigationDestination.route.toString()) {
+                        inclusive = true
+                    }
+                }
+            })
     }
 }

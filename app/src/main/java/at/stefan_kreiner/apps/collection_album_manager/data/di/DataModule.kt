@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2023 Stefan Kreiner
  * Copyright (C) 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +15,16 @@
  * limitations under the License.
  */
 
-package at.stefan_kreiner.apps.collection_album_manager.data.di
+package com.example.collection_album_manager.data.di
 
+import at.stefan_kreiner.apps.collection_album_manager.data.CollectionAlbumItemRepository
+import at.stefan_kreiner.apps.collection_album_manager.data.CollectionAlbumRepository
+import at.stefan_kreiner.apps.collection_album_manager.data.ProductionCollectionAlbumItemRepository
+import at.stefan_kreiner.apps.collection_album_manager.data.ProductionCollectionAlbumRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import at.stefan_kreiner.apps.collection_album_manager.data.CollectionAlbumRepository
-import at.stefan_kreiner.apps.collection_album_manager.data.DefaultCollectionAlbumRepository
-import javax.inject.Inject
 import javax.inject.Singleton
 
 @Module
@@ -34,16 +34,28 @@ interface DataModule {
     @Singleton
     @Binds
     fun bindsCollectionAlbumRepository(
-        collectionAlbumRepository: DefaultCollectionAlbumRepository
+        implementation: ProductionCollectionAlbumRepository
     ): CollectionAlbumRepository
+
+    @Singleton
+    @Binds
+    fun bindsCollectionAlbumItemRepository(
+        implementation: ProductionCollectionAlbumItemRepository
+    ): CollectionAlbumItemRepository
+
+//    @Singleton
+//    @Binds
+//    fun bindsMyModelRepository(
+//        implementation: DefaultMyModelRepository
+//    ): MyModelRepository
 }
 
-class FakeCollectionAlbumRepository @Inject constructor() : CollectionAlbumRepository {
-    override val collectionAlbums: Flow<List<String>> = flowOf(fakeCollectionAlbums)
-
-    override suspend fun add(name: String) {
-        throw NotImplementedError()
-    }
-}
-
-val fakeCollectionAlbums = listOf("One", "Two", "Three")
+//class FakeCollectionAlbumRepository @Inject constructor() : CollectionAlbumRepository {
+//    override val collectionAlbums: Flow<List<String>> = flowOf(fakeCollectionAlbums)
+//
+//    override suspend fun add(name: String) {
+//        throw NotImplementedError()
+//    }
+//}
+//
+//val fakeCollectionAlbums = listOf("One", "Two", "Three")

@@ -37,7 +37,7 @@ fun MainNavigation(
     NavHost(navController = navController, startDestination = startDestination.toString()) {
         MainScreenNavigationGraph.navigation(
             this,
-            navController = navController
+            navController = navController,
         )
     }
 }

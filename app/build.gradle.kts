@@ -29,7 +29,7 @@ android {
 
     defaultConfig {
         applicationId = "at.stefan_kreiner.apps.collection_album_manager"
-        minSdk = 21
+        minSdk = 26
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -108,6 +108,9 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+
+    // Ads
+    implementation(libs.play.services.ads)
 
     // Compose
     implementation(libs.androidx.compose.ui)

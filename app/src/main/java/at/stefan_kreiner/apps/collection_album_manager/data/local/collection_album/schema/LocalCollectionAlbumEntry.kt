@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2023 Stefan Kreiner
  * Copyright (C) 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,28 +15,21 @@
  * limitations under the License.
  */
 
-package at.stefan_kreiner.apps.collection_album_manager.data.local.database
+package at.stefan_kreiner.apps.collection_album_manager.data.local.collection_album.schema
 
-import androidx.room.Dao
+import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Insert
+import androidx.room.Index
 import androidx.room.PrimaryKey
-import androidx.room.Query
-import kotlinx.coroutines.flow.Flow
 
-@Entity
-data class CollectionAlbum(
-    val name: String
-) {
-    @PrimaryKey(autoGenerate = true)
-    var uid: Int = 0
-}
+typealias LocalCollectionAlbumIdentifierType = Long
 
-@Dao
-interface CollectionAlbumDao {
-    @Query("SELECT * FROM collectionalbum ORDER BY uid DESC LIMIT 10")
-    fun getCollectionAlbums(): Flow<List<CollectionAlbum>>
-
-    @Insert
-    suspend fun insertCollectionAlbum(item: CollectionAlbum)
-}
+@Entity(
+    tableName = "collection_album", indices = [Index(value = ["name"], unique = true)]
+)
+data class LocalCollectionAlbumEntry(
+    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "description") val description: String,
+    @ColumnInfo(name = "item_count") val itemCount: Int,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "identifier") var identifier: LocalCollectionAlbumIdentifierType = 0,
+)

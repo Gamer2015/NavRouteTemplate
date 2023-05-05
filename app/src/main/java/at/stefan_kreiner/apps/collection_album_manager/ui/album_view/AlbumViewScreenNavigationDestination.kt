@@ -34,7 +34,7 @@ fun AlbumViewScreenNavigationDestination.composable(
         )
 
         AlbumViewScreen(
-            itemId = parameters.itemId,
+            albumId = parameters.itemId,
             navigateUp = navigateUp,
         )
     }
