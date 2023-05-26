@@ -10,6 +10,8 @@ import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
 
+private const val TAG = "AdMobActivity"
+
 open class AdMobActivity : ComponentActivity() {
     protected lateinit var consentInformation: ConsentInformation
     protected lateinit var consentForm: ConsentForm
@@ -19,7 +21,7 @@ open class AdMobActivity : ComponentActivity() {
         consentRequestParameters : ConsentRequestParameters = ConsentRequestParameters.Builder().build(),
     ) {
         // Set tag for under age of consent. false means users are not under age.
-        Log.d("Consent", "initialize ad mob")
+        Log.d(TAG, "initialize ad mob")
         MobileAds.initialize(this)
         MobileAds.setRequestConfiguration(requestConfiguration)
 
@@ -27,14 +29,14 @@ open class AdMobActivity : ComponentActivity() {
         consentInformation.requestConsentInfoUpdate(this, consentRequestParameters, {
             // The consent information state was updated.
             // You are now ready to check if a form is available.
-            Log.d("Consent", "Form available")
+            Log.d(TAG, "Form available")
             if (consentInformation.isConsentFormAvailable) {
                 loadConsentForm()
-                Log.d("Consent", "Form available")
+                Log.d(TAG, "Form available")
             }
         }, {
             // Handle the error.
-            Log.d("Consent", "ConsentInfoUpdateRequest failed: ${it.message}")
+            Log.d(TAG, "ConsentInfoUpdateRequest failed: ${it.message}")
         })
     }
 

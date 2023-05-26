@@ -102,7 +102,7 @@ fun AlbumInsertSuccessScreen(
 
     var initialCollectionName = defaultCollectionName
     var initialAlbumNameCounter = 0
-    while(collections.map {it.name}.contains(initialCollectionName)) {
+    while (collections.map { it.name }.contains(initialCollectionName)) {
         initialAlbumNameCounter += 1
         initialCollectionName = "$defaultCollectionName $initialAlbumNameCounter"
     }
@@ -163,24 +163,28 @@ fun AlbumInsertSuccessScreen(
             isSaveInProgress = false
         }
     }
+
     fun save() {
         if (isSaveAllowed) {
             saveRaw()
             focusManager.clearFocus()
-        } else if(!isValidName) {
+        } else if (!isValidName) {
             nameInputFocusRequester.requestFocus()
-        } else if(!isValidItemCount) {
+        } else if (!isValidItemCount) {
             itemCountInputFocusRequester.requestFocus()
         }
     }
 
     Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }, topBar = {
         TopAppBar(title = {
-            Text(text = stringResource(R.string.album_insert_title), color = MaterialTheme.colorScheme.onPrimary)
+            Text(
+                text = stringResource(R.string.album_insert_title),
+                color = MaterialTheme.colorScheme.onPrimary
+            )
         }, colors = TopAppBarDefaults.smallTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary
         ), navigationIcon = {
-            if(navigateUp != null) {
+            if (navigateUp != null) {
                 IconButton(
                     onClick = navigateUp, colors = IconButtonDefaults.iconButtonColors(
                         contentColor = MaterialTheme.colorScheme.onPrimary
@@ -254,11 +258,13 @@ fun AlbumInsertForm(
         OutlinedTextField(
             value = nameInput,
             singleLine = true,
-            modifier = Modifier.fillMaxWidth().focusRequester(nameInputFocusRequester),
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(nameInputFocusRequester),
             onValueChange = onNameInputChanged,
             enabled = !isSaveInProgress,
             label = {
-//                Text(text = stringResource(R.string.collection_album_name_textfield_label))
+                Text(text = stringResource(R.string.collection_album_name_textfield_label))
             },
             isError = !isValidName,
             supportingText = if (isValidName) null else ({
@@ -273,7 +279,9 @@ fun AlbumInsertForm(
         OutlinedTextField(
             value = itemCountInput,
             singleLine = true,
-            modifier = Modifier.fillMaxWidth().focusRequester(itemCountInputFocusRequester),
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(itemCountInputFocusRequester),
             onValueChange = onItemCountInputChanged,
             isError = !isValidItemCount,
             enabled = !isSaveInProgress,

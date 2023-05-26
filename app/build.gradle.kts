@@ -53,8 +53,8 @@ android {
         applicationId = "at.stefan_kreiner.apps.collection_album_manager"
         minSdk = 26
         targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "at.stefan_kreiner.apps.collection_album_manager.HiltTestRunner"
         vectorDrawables {
@@ -73,7 +73,7 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
         this.release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
         }

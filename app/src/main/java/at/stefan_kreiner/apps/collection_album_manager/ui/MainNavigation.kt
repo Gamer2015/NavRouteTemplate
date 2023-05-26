@@ -16,6 +16,9 @@
 
 package at.stefan_kreiner.apps.collection_album_manager.ui
 
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavDeepLink
@@ -26,6 +29,7 @@ import at.stefan_kreiner.apps.collection_album_manager.ui.main.navigation
 import at.stefan_kreiner.apps.collection_album_manager.ui.navigation.NavigationDestination
 import com.example.collection_album_manager.ui.navigation.NavigationRoute
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainNavigation(
     modifier: Modifier = Modifier,
@@ -34,16 +38,40 @@ fun MainNavigation(
 ) {
     val navController = rememberNavController()
 
-    NavHost(
-        modifier = modifier,
-        navController = navController,
-        startDestination = startDestination.toString(),
-    ) {
-        MainScreenNavigationGraph.navigation(
-            this,
+    Scaffold(modifier = modifier, bottomBar = {
+//        BottomAppBar {
+//            Row(
+//                modifier = Modifier.fillMaxWidth(),
+//                horizontalArrangement = Arrangement.SpaceEvenly,
+//                verticalAlignment = Alignment.CenterVertically,
+//            ) {
+//                IconButton(onClick = { /* Check onClick */ }) {
+//                    Icon(Icons.Filled.Home, contentDescription = "")
+//                }
+//                IconButton(onClick = { /* Edit onClick */ }) {
+//                    Icon(
+//                        Icons.Filled.Settings, contentDescription = ""
+//                    )
+//                }
+//            }
+//        }
+    }) {
+        NavHost(
+            modifier = Modifier.padding(it),
             navController = navController,
-            deepLinks = deepLinks,
-        )
+            startDestination = startDestination.toString(),
+        ) {
+            MainScreenNavigationGraph.navigation(
+                this,
+                navController = navController,
+                deepLinks = deepLinks,
+            )
+            MainScreenNavigationGraph.navigation(
+                this,
+                navController = navController,
+                deepLinks = deepLinks,
+            )
+        }
     }
 }
 

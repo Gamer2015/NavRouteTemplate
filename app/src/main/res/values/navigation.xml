@@ -16,7 +16,7 @@
 
 <resources>
     <!-- navigation -->
-    <string name="collecton_deep_link_scheme" translatable="false">collection_deep_link_scheme</string>
-    <string name="collecton_deep_link_host" translatable="false">collection_deep_link_host</string>
-    <string name="collecton_deep_link_path_prefix" translatable="false">/gizmos</string>
+<!--    <string name="colecton_deep_link_host" translatable="false">collection_deep_link_host</string>-->
+<!--    <string name="collllecton_deep_link_scheme" translatable="false">collection_deep_link_scheme</string>-->
+<!--    <string name="colecton_deep_link_path_prefix" translatable="false">/gizmos</string>-->
 </resources>

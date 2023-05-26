@@ -40,13 +40,15 @@ class MainActivity : AdMobActivity(
         this.prepareAdMob(
             requestConfiguration = RequestConfiguration.Builder().setTestDeviceIds(
                 listOf(
-                    "6B18619BD708F9911BA92FC3300CF0E7"
+                    "6B18619BD708F9911BA92FC3300CF0E7", "A914562AE272BEFFCB903C909D9B4723"
                 )
             ).build(),
             consentRequestParameters = ConsentRequestParameters.Builder().setConsentDebugSettings(
                 ConsentDebugSettings.Builder(this)
-                    .addTestDeviceHashedId("6B18619BD708F9911BA92FC3300CF0E7").build()
-            ).build()
+                    .addTestDeviceHashedId("6B18619BD708F9911BA92FC3300CF0E7")
+                    .addTestDeviceHashedId("A914562AE272BEFFCB903C909D9B4723")
+                .build()
+            ).setTagForUnderAgeOfConsent(false).build()
         )
         setContent {
             App()
