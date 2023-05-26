@@ -34,10 +34,15 @@ fun MainNavigation(
 ) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = startDestination.toString()) {
+    NavHost(
+        modifier = modifier,
+        navController = navController,
+        startDestination = startDestination.toString(),
+    ) {
         MainScreenNavigationGraph.navigation(
             this,
             navController = navController,
+            deepLinks = deepLinks,
         )
     }
 }

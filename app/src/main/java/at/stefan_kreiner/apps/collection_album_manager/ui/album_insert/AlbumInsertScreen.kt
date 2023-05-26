@@ -258,11 +258,11 @@ fun AlbumInsertForm(
             onValueChange = onNameInputChanged,
             enabled = !isSaveInProgress,
             label = {
-                Text(text = stringResource(R.string.collection_album_name_textfield_label))
+//                Text(text = stringResource(R.string.collection_album_name_textfield_label))
             },
             isError = !isValidName,
             supportingText = if (isValidName) null else ({
-                Text(stringResource(R.string.duplicate_collection_name_error_text))
+                Text(stringResource(R.string.duplicate_collection_name_error_message))
             }),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             keyboardActions = KeyboardActions(onNext = {
@@ -281,7 +281,7 @@ fun AlbumInsertForm(
                 Text(stringResource(R.string.total_collection_size_textfield_label))
             },
             supportingText = if (isValidItemCount) null else ({
-                Text(stringResource(R.string.invalid_item_count_error_text))
+                Text(stringResource(R.string.invalid_item_count_error_message))
             }),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,

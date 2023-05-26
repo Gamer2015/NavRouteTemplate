@@ -26,9 +26,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.CollectionAlbumManager"
+        android:theme="@style/Theme.App.SplashScreen"
         android:name=".CollectionAlbumManager"
-        tools:targetApi="31">
+        tools:targetApi="33">
         <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -37,11 +37,20 @@
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.CollectionAlbumManager">
+            android:theme="@style/Theme.App.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+<!--                &lt;!&ndash; Accepts URIs that begin with "http://www.example.com/gizmos” &ndash;&gt;-->
+<!--                <data android:scheme="@string/collecton_deep_link_scheme"-->
+<!--                    android:host="@string/collecton_deep_link_host"/>-->
+<!--                &lt;!&ndash; note that the leading "/" is required for pathPrefix&ndash;&gt;-->
+<!--            </intent-filter>-->
         </activity>
     </application>
 

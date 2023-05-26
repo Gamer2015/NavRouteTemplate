@@ -15,25 +15,18 @@
   -->
 
 <resources>
-    <!-- ads -->
-    <string name="ad_mob_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
-    <string name="ad_mob_banner_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="ad_mob_interstitial_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
-    <string name="ad_mob_interstitial_video_id" translatable="false">ca-app-pub-3940256099942544/8691691433</string>
-    <string name="ad_mob_rewarded_interstitial_video_id" translatable="false">ca-app-pub-3940256099942544/5354046379</string>
-
     <!-- ui -->
     <string name="app_name">Collections</string>
-    <string name="collection_album_name_textfield_label" translatable="true">Name</string>
-    <string name="total_collection_size_textfield_label" translatable="true">Number of Collectibles</string>
-    <string name="albums_list_screen_title" translatable="true">Collections</string>
-    <string name="collection_name_input_default" translatable="true">My Collection</string>
-    <string name="album_insert_error_message" translatable="true">Save failed</string>
-    <string name="album_insert_title" translatable="true">New Collection</string>
-    <string name="save_album_item_changes_button_description" translatable="true">Save changes</string>
-    <string name="back_to_collection_list_button_description" translatable="true">Back to collection list</string>
-    <string name="duplicate_collection_name_error_text" translatable="true">A collection with this name already exists</string>
-    <string name="invalid_item_count_error_text" translatable="true">Please enter a positive integer</string>
+    <string name="collection_album_name_textfield_label">Name</string>
+    <string name="total_collection_size_textfield_label">Number of Collectibles</string>
+    <string name="albums_list_screen_title">Collections</string>
+    <string name="collection_name_input_default">My Collection</string>
+    <string name="album_insert_error_message">Save failed</string>
+    <string name="album_insert_title">New Collection</string>
+    <string name="save_album_item_changes_button_description">Save changes</string>
+    <string name="back_to_collection_list_button_description">Back to collection list</string>
+    <string name="duplicate_collection_name_error_message">A collection with this name already exists</string>
+    <string name="invalid_item_count_error_message">Please enter a positive integer</string>
     <string name="abort_collection_item_change_button_description">Discard changes</string>
     <string name="delete_action_label">Delete</string>
     <string name="deletion_failed_error_message">Deletion failed</string>

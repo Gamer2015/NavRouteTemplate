@@ -72,7 +72,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AlbumViewScreen(
+fun AlbumViewScreenByIdentifier(
     albumId: Long,
     navigateUp: () -> Unit,
     lifecycle: Lifecycle = LocalLifecycleOwner.current.lifecycle,
@@ -93,10 +93,43 @@ fun AlbumViewScreen(
         is AlbumViewUiState.Success -> {
             val data = (uiState as AlbumViewUiState.Success).data
             if (data == null) {
-                AlbumViewSuccessScreenWithoutAlbum(navigateUp = { /*TODO*/ })
+                AlbumViewSuccessScreenWithoutAlbum(navigateUp = navigateUp)
             } else {
                 AlbumViewSuccessScreenWithAlbum(
-                    album = data, navigateUp = navigateUp
+                    album = data, navigateUp = navigateUp,
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AlbumViewScreenByName(
+    albumName: String,
+    navigateUp: () -> Unit,
+    lifecycle: Lifecycle = LocalLifecycleOwner.current.lifecycle,
+    viewModel: AlbumViewScreenViewModel = hiltViewModel(),
+) {
+    val uiStateFlow = viewModel.uiStateByName(albumName)
+    val uiState by produceState<AlbumViewUiState>(
+        initialValue = AlbumViewUiState.Loading, key1 = lifecycle, key2 = viewModel
+    ) {
+        lifecycle.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
+            uiStateFlow.collect { value = it }
+        }
+    }
+
+    when (uiState) {
+        is AlbumViewUiState.Loading -> {}
+        is AlbumViewUiState.Error -> {}
+        is AlbumViewUiState.Success -> {
+            val data = (uiState as AlbumViewUiState.Success).data
+            if (data == null) {
+                AlbumViewSuccessScreenWithoutAlbum(navigateUp = navigateUp)
+            } else {
+                AlbumViewSuccessScreenWithAlbum(
+                    album = data, navigateUp = navigateUp,
                 )
             }
         }
@@ -135,38 +168,48 @@ fun AlbumViewSuccessScreenWithAlbum(
     }
 
     var isSaveInProgress = remember { false }
-    val isEnabled = !isSaveInProgress && isEditState
+    val isEditEnabled = !isSaveInProgress && isEditState
 
     val context = LocalContext.current
     var isMoreActionsExpanded by remember { mutableStateOf(false) }
 
-    var changesHaveBeenMade by rememberSaveable {
-        mutableStateOf(false)
+    var savedChanges by rememberSaveable {
+        mutableStateOf(setOf<Int>())
     }
+    val changesHaveBeenMade = savedChanges.isNotEmpty()
 
     val searchInput =
         rememberSaveable(stateSaver = TextFieldValue.Saver) { mutableStateOf(TextFieldValue("")) }
 
     fun save() {
-        if (!isEnabled) return
+        if (!isEditEnabled) return
         isSaveInProgress = true
         Log.d(TAG, "Changed items: $changedItems")
         viewModel.changeItems(
             album,
             changedItems,
         ) {
-            if (it == null && changedItems.isNotEmpty()) {
-                Log.d(TAG, "Updated changesHaveBeenMade")
-                changesHaveBeenMade = true
+            if (it == null) {
+                savedChanges = (savedChanges - changedItems) + (changedItems - savedChanges)
+                Log.d(TAG, "Changed items: $changedItems")
             }
             isEditState = false
             isSaveInProgress = false
-            Log.d(TAG, "Changed items: $changedItems")
         }
     }
 
-    BackHandler(enabled = isEnabled) {
+    BackHandler(enabled = isEditEnabled) {
         isEditState = false
+    }
+
+    val editAndNavigateUpInterstitial =
+        stringResource(id = R.string.ad_mob_interstitial_id__edit_and_navigate_up)
+    BackHandler(enabled = !isEditEnabled && changesHaveBeenMade) {
+        navigateUp()
+        if (changesHaveBeenMade) {
+            Log.d(TAG, "Show ad")
+            showInterstitial(context = context, editAndNavigateUpInterstitial)
+        }
     }
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -180,14 +223,16 @@ fun AlbumViewSuccessScreenWithAlbum(
         }, colors = TopAppBarDefaults.smallTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary
         ), navigationIcon = {
-            if (!isEnabled) {
+            if (!isEditEnabled) {
                 IconButton(
                     onClick = {
+                        navigateUp()
                         if (changesHaveBeenMade) {
                             Log.d(TAG, "Show ad")
-                            showInterstitial(context = context)
+                            showInterstitial(
+                                context = context, adUnitId = editAndNavigateUpInterstitial
+                            )
                         }
-                        navigateUp()
                     }, colors = IconButtonDefaults.iconButtonColors(
                         contentColor = MaterialTheme.colorScheme.onPrimary
                     )
@@ -259,7 +304,7 @@ fun AlbumViewSuccessScreenWithAlbum(
             }
         })
     }, floatingActionButton = {
-        if (!isEnabled) {
+        if (!isEditEnabled) {
             FloatingActionButton(onClick = {
                 isEditState = true
             }) {
@@ -295,7 +340,7 @@ fun AlbumViewSuccessScreenWithAlbum(
                     onValueChange = {
                         searchInput.value = it
                         val itemPosition = searchInput.value.text.toIntOrNull()
-                        if(itemPosition != null && itemPosition >= 1) {
+                        if (itemPosition != null && itemPosition >= 1) {
                             scrollScope.launch {
                                 scrollState.scrollToItem(
                                     itemPosition - 1
@@ -327,11 +372,16 @@ fun AlbumViewSuccessScreenWithAlbum(
                 items(itemCount) { index ->
                     if (changedItems.contains(index).xor(items.contains(index))) {
                         Button(
-                            enabled = isEnabled, onClick = {
+                            enabled = isEditEnabled,
+                            onClick = {
                                 toggle(index)
-                            }, modifier = Modifier
+                            },
+                            modifier = Modifier
                                 .aspectRatio(1f)
-                                .padding(2.dp)
+                                .padding(2.dp),
+                            contentPadding = PaddingValues(
+                                horizontal = 0.dp
+                            )
                         ) {
                             Text(
                                 text = (index + 1).toString(),
@@ -341,11 +391,16 @@ fun AlbumViewSuccessScreenWithAlbum(
                         }
                     } else {
                         OutlinedButton(
-                            enabled = isEnabled, onClick = {
+                            enabled = isEditEnabled,
+                            onClick = {
                                 toggle(index)
-                            }, modifier = Modifier
+                            },
+                            modifier = Modifier
                                 .aspectRatio(1f)
-                                .padding(2.dp)
+                                .padding(2.dp),
+                            contentPadding = PaddingValues(
+                                horizontal = 0.dp
+                            )
                         ) {
                             Text(
                                 text = (index + 1).toString(),

@@ -16,19 +16,22 @@
 
 <resources>
     <!-- ui -->
+    <string name="album_insert_title">Neue Sammlung</string>
+    <string name="albums_list_screen_title">Sammlungen</string>
     <string name="app_name">Sammlungen</string>
     <string name="collection_album_name_textfield_label">Name</string>
-    <string name="total_collection_size_textfield_label">Anzahl an Sammelstücken</string>
-    <string name="albums_list_screen_title">Sammlungen</string>
     <string name="collection_name_input_default">Meine Sammlung</string>
+    <string name="delete_action_label">Löschen</string>
+    <string name="total_collection_size_textfield_label">Anzahl an Sammelstücken</string>
+
     <string name="album_insert_error_message">Speichern fehlgeschlagen</string>
-    <string name="album_insert_title">Neue Sammlung</string>
+    <string name="duplicate_collection_name_error_message">Eine Sammlung mit diesem Namen existiert bereits</string>
+    <string name="invalid_item_count_error_message">Eine positivie ganze Zahl wird benötigt</string>
+    <string name="deletion_failed_error_message">Löschen fehlgeschlagen</string>
+
+    <!-- semantics -->
     <string name="save_album_item_changes_button_description">Änderungen Speichern</string>
     <string name="back_to_collection_list_button_description">Zurück zur Sammlungsliste</string>
-    <string name="duplicate_collection_name_error_text">Eine Sammlung mit diesem Namen existiert bereits</string>
-    <string name="invalid_item_count_error_text">Eine positivie ganze Zahl wird benötigt</string>
     <string name="abort_collection_item_change_button_description">Änderungen verwerfen</string>
-    <string name="delete_action_label">Löschen</string>
-    <string name="deletion_failed_error_message">Löschen fehlgeschlagen</string>
     <string name="start_album_edit_button_description">Sammlung bearbeiten</string>
 </resources>

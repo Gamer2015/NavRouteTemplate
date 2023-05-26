@@ -23,8 +23,16 @@ class AlbumViewScreenViewModel @Inject constructor(
     private val collectionAlbumRepository: CollectionAlbumRepository,
     private val collectionAlbumItemRepository: CollectionAlbumItemRepository,
 ) : ViewModel() {
-    fun uiStateByIdentifier(collectionAlbumIdentifierType: CollectionAlbumIdentifierType): StateFlow<AlbumViewUiState> =
-        collectionAlbumRepository.getByIdentifierWithItems(collectionAlbumIdentifierType)
+    fun uiStateByIdentifier(collectionAlbumIdentifier: CollectionAlbumIdentifierType): StateFlow<AlbumViewUiState> =
+        collectionAlbumRepository.getByIdentifierWithItems(collectionAlbumIdentifier)
+            .map<CollectionAlbum?, AlbumViewUiState>(
+                AlbumViewUiState::Success
+            ).catch { emit(AlbumViewUiState.Error(it)) }.stateIn(
+                viewModelScope, SharingStarted.WhileSubscribed(5000), AlbumViewUiState.Loading
+            )
+
+    fun uiStateByName(collectionAlbumName: String): StateFlow<AlbumViewUiState> =
+        collectionAlbumRepository.getByNameWithItems(collectionAlbumName)
             .map<CollectionAlbum?, AlbumViewUiState>(
                 AlbumViewUiState::Success
             ).catch { emit(AlbumViewUiState.Error(it)) }.stateIn(

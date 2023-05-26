@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+import java.io.FileInputStream
+import java.util.Properties
+
 @Suppress("DSL_SCOPE_VIOLATION") // Remove when fixed https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
     alias(libs.plugins.android.application)
@@ -23,7 +26,26 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+// Create a variable called keystorePropertiesFile, and initialize it to your
+// keystore.properties file, in the rootProject folder.
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+
+// Initialize a new Properties() object called keystoreProperties.
+val keystoreProperties = Properties()
+
+// Load your keystore.properties file into the keystoreProperties object.
+keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+
 android {
+    signingConfigs {
+        create("release") {
+            keyAlias = keystoreProperties["uploadKeyAlias"] as String
+            keyPassword = keystoreProperties["uploadKeyPassword"] as String
+            storeFile = rootProject.file(keystoreProperties["keystoreFilename"] as String)
+            storePassword = keystoreProperties["keystorePassword"] as String
+        }
+    }
+
     namespace = "at.stefan_kreiner.apps.collection_album_manager"
     compileSdk = 33
 
@@ -46,9 +68,14 @@ android {
     }
 
     buildTypes {
-        getByName("release") {
+        this.debug {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+        this.release {
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 
@@ -73,7 +100,7 @@ android {
         kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
     }
 
-    packagingOptions {
+    packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
@@ -113,6 +140,7 @@ dependencies {
     implementation(libs.play.services.ads)
 
     // Compose
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)

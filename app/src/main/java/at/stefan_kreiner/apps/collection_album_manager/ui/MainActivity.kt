@@ -17,48 +17,50 @@
 package at.stefan_kreiner.apps.collection_album_manager.ui
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import at.stefan_kreiner.apps.collection_album_manager.ui.composables.loadInterstitial
-import at.stefan_kreiner.apps.collection_album_manager.ui.composables.removeInterstitial
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import at.stefan_kreiner.apps.collection_album_manager.ui.ads.AdMobActivity
 import at.stefan_kreiner.apps.collection_album_manager.ui.theme.MyApplicationTheme
-import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
+import com.google.android.ump.ConsentDebugSettings
+import com.google.android.ump.ConsentRequestParameters
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
-
+class MainActivity : AdMobActivity(
+) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContent {
-            MyApplicationTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
-                ) {
-                    MainNavigation()
-                }
-            }
-        }
-
-        MobileAds.initialize(this)
-        MobileAds.setRequestConfiguration(
-            RequestConfiguration.Builder().setTestDeviceIds(
+        installSplashScreen()
+        this.prepareAdMob(
+            requestConfiguration = RequestConfiguration.Builder().setTestDeviceIds(
                 listOf(
                     "6B18619BD708F9911BA92FC3300CF0E7"
                 )
+            ).build(),
+            consentRequestParameters = ConsentRequestParameters.Builder().setConsentDebugSettings(
+                ConsentDebugSettings.Builder(this)
+                    .addTestDeviceHashedId("6B18619BD708F9911BA92FC3300CF0E7").build()
             ).build()
-        );
-        loadInterstitial(this)
+        )
+        setContent {
+            App()
+        }
     }
+}
 
-    override fun onDestroy() {
-        removeInterstitial()
-        super.onDestroy()
+@Composable
+fun App() {
+    MyApplicationTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
+        ) {
+            MainNavigation()
+        }
     }
 }

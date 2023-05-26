@@ -29,18 +29,21 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.colorResource
 import androidx.core.view.ViewCompat
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+@Composable
+private fun customDarkColorScheme() = darkColorScheme(
+    primary = colorResource(Purple80),
+    secondary = colorResource(PurpleGrey80),
+    tertiary = colorResource(Pink80)
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+@Composable
+private fun customLightColorScheme() = lightColorScheme(
+    primary = colorResource(Purple40),
+    secondary = colorResource(PurpleGrey40),
+    tertiary = colorResource(Pink40)
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -65,8 +68,8 @@ fun MyApplicationTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> customDarkColorScheme()
+        else -> customLightColorScheme()
     }
     val view = LocalView.current
     if (!view.isInEditMode) {

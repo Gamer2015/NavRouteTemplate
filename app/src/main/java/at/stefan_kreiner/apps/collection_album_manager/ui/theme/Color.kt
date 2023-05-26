@@ -16,12 +16,12 @@
 
 package at.stefan_kreiner.apps.collection_album_manager.ui.theme
 
-import androidx.compose.ui.graphics.Color
+import at.stefan_kreiner.apps.collection_album_manager.R
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+val Purple80 = R.color.purple_80
+val PurpleGrey80 = R.color.purple_grey_80
+val Pink80 = R.color.pink_80
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val Purple40 = R.color.purple_40
+val PurpleGrey40 = R.color.purple_grey_40
+val Pink40 = R.color.pink_40

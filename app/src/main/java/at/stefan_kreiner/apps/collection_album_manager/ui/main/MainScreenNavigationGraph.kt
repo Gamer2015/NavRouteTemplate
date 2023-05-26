@@ -1,9 +1,11 @@
 package at.stefan_kreiner.apps.collection_album_manager.ui.main
 
 import androidx.navigation.NavController
+import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import at.stefan_kreiner.apps.collection_album_manager.ui.album_list.AlbumListScreenNavigationGraph
 import at.stefan_kreiner.apps.collection_album_manager.ui.album_list.navigation
+import at.stefan_kreiner.apps.collection_album_manager.ui.navigation.NavigationDestination
 import at.stefan_kreiner.apps.collection_album_manager.ui.navigation.NavigationGraph
 import at.stefan_kreiner.apps.collection_album_manager.ui.navigation.NavigationRoute0
 import at.stefan_kreiner.apps.collection_album_manager.ui.navigation.UniversalResourceIdentifierPath
@@ -17,13 +19,15 @@ object MainScreenNavigationGraph : NavigationGraph(AlbumListScreenNavigationGrap
 }
 
 fun MainScreenNavigationGraph.navigation(
-    builder : NavGraphBuilder,
+    builder: NavGraphBuilder,
     navController: NavController,
+    deepLinks: Map<NavigationDestination, List<NavDeepLink>>,
 ) {
     builder.navigation(this) {
         AlbumListScreenNavigationGraph.navigation(
             this,
             navController,
+            deepLinks = deepLinks,
         )
     }
 }

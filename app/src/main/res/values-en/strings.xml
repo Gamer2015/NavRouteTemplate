@@ -1,0 +1,39 @@
+<!--
+  ~ Copyright (C) 2022 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <!-- navigation -->
+<!--    <string name="collecton_deep_link_scheme" translatable="false">collection_deep_link_scheme</string>-->
+<!--    <string name="collecton_deep_link_host" translatable="false">collection_deep_link_host</string>-->
+<!--    <string name="collecton_deep_link_path_prefix" translatable="false">/gizmos</string>-->
+
+    <!-- ui -->
+    <string name="app_name">Collections (translation)</string>
+    <string name="collection_album_name_textfield_label">Name (translation)</string>
+    <string name="total_collection_size_textfield_label">Number of Collectibles (translation)</string>
+    <string name="albums_list_screen_title">Collections (translation)</string>
+    <string name="collection_name_input_default">My Collection (translation)</string>
+    <string name="album_insert_error_message">Save failed (translation)</string>
+    <string name="album_insert_title">New Collection (translation)</string>
+    <string name="save_album_item_changes_button_description">Save changes (translation)</string>
+    <string name="back_to_collection_list_button_description">Back to collection list (translation)</string>
+    <string name="duplicate_collection_name_error_message">A collection with this name already exists (translation)</string>
+    <string name="invalid_item_count_error_message">Please enter a positive integer (translation)</string>
+    <string name="abort_collection_item_change_button_description">Discard changes (translation)</string>
+    <string name="delete_action_label">Delete (translation)</string>
+    <string name="deletion_failed_error_message">Deletion failed (translation)</string>
+    <string name="start_album_edit_button_description">Edit Collection (translation)</string>
+</resources>
