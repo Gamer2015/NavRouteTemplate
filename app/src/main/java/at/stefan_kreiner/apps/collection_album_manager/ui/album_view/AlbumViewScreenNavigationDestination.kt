@@ -1,6 +1,5 @@
 package at.stefan_kreiner.apps.collection_album_manager.ui.album_view
 
-import android.util.Log
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavDeepLink
@@ -14,45 +13,30 @@ import at.stefan_kreiner.apps.collection_album_manager.ui.navigation.composable
 import at.stefan_kreiner.apps.collection_album_manager.ui.navigation.encoded
 import at.stefan_kreiner.apps.collection_album_manager.ui.navigation.toNamedArgument
 
-object AlbumViewScreenNavigationDestinationByName : NavigationDestination() {
+object AlbumViewScreenNavigationDestination : NavigationDestination() {
     data class Parameters(
-        val itemName: String,
-    ) : NavigationParameters1<String?>
+        val itemId: Long,
+    ) : NavigationParameters1<Long>
 
-    val itemNameArg = NavType.StringType.toNamedArgument(Parameters::itemName.name)
-    override val route = NavigationRoute1<String?, Parameters>(
-        itemNameArg,
-        path = UniversalResourceIdentifierPath("albums", "viewByName", itemNameArg.encoded)
+    val itemIdArg = NavType.LongType.toNamedArgument(Parameters::itemId.name)
+    override val route = NavigationRoute1<Long, Parameters>(
+        itemIdArg,
+        path = UniversalResourceIdentifierPath("albums", "viewByIdentifier", itemIdArg.encoded)
     )
 }
 
-fun AlbumViewScreenNavigationDestinationByName.composable(
+fun AlbumViewScreenNavigationDestination.composable(
     builder: NavGraphBuilder,
     navigateUp: () -> Unit,
     deepLinks: List<NavDeepLink>,
     windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier,
 ) {
-    Log.d("Navigation", "AlbumViewScreenNavigationDestinationByName Deep Links: $deepLinks")
-    deepLinks.forEach {
-        Log.d(
-            "Navigation", "AlbumViewScreenNavigationDestinationByName Deep Link: ${it.uriPattern}"
-        )
-    }
     builder.composable(
         destination = this,
         deepLinks = deepLinks,
-    ) { backStackEntry ->
-        val parameters = AlbumViewScreenNavigationDestinationByName.Parameters(
-            itemName = backStackEntry.arguments?.getString(itemNameArg.name)!!
-        )
-        Log.d(
-            "Navigation",
-            "AlbumViewScreenNavigationDestinationByName(itemName=${parameters.itemName})"
-        )
-
-        AlbumViewScreenByName(
-            albumName = parameters.itemName,
+    ) {
+        AlbumViewScreen(
             navigateUp = navigateUp,
             windowSizeClass = windowSizeClass,
             modifier = modifier,

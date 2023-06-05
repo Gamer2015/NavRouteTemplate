@@ -2,7 +2,6 @@ package at.stefan_kreiner.apps.collection_album_manager.ui.ads
 
 import android.util.Log
 import androidx.activity.ComponentActivity
-import at.stefan_kreiner.apps.collection_album_manager.ui.composables.loadAds
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.ump.ConsentForm

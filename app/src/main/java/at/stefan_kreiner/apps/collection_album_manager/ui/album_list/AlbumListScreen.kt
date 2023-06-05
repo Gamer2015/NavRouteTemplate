@@ -30,7 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import at.stefan_kreiner.apps.collection_album_manager.R
 import at.stefan_kreiner.apps.collection_album_manager.data.CollectionAlbum
-import at.stefan_kreiner.apps.collection_album_manager.ui.composables.height
+import at.stefan_kreiner.apps.collection_album_manager.ui.composable.height
 
 @Composable
 fun AlbumListScreen(

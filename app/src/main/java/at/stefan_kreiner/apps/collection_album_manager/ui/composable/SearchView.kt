@@ -1,4 +1,4 @@
-package at.stefan_kreiner.apps.collection_album_manager.ui.composables
+package at.stefan_kreiner.apps.collection_album_manager.ui.composable
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions

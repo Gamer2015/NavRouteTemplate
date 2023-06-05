@@ -7,8 +7,7 @@ import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import at.stefan_kreiner.apps.collection_album_manager.ui.album_insert.AlbumInsertScreenNavigationDestination
 import at.stefan_kreiner.apps.collection_album_manager.ui.album_insert.composable
-import at.stefan_kreiner.apps.collection_album_manager.ui.album_view.AlbumViewScreenNavigationDestinationByIdentifier
-import at.stefan_kreiner.apps.collection_album_manager.ui.album_view.AlbumViewScreenNavigationDestinationByName
+import at.stefan_kreiner.apps.collection_album_manager.ui.album_view.AlbumViewScreenNavigationDestination
 import at.stefan_kreiner.apps.collection_album_manager.ui.album_view.composable
 import at.stefan_kreiner.apps.collection_album_manager.ui.navigation.NavigationDestination
 import at.stefan_kreiner.apps.collection_album_manager.ui.navigation.NavigationGraph
@@ -51,9 +50,9 @@ fun AlbumListScreenNavigationGraph.navigation(
             },
             navigateToAlbumViewByIdentifier = { itemId ->
                 Log.d("Navigation", "Item id: $itemId")
-                AlbumViewScreenNavigationDestinationByIdentifier.route.navigateWith(
+                AlbumViewScreenNavigationDestination.route.navigateWith(
                     navController = navController,
-                    AlbumViewScreenNavigationDestinationByIdentifier.Parameters(
+                    AlbumViewScreenNavigationDestination.Parameters(
                         itemId = itemId
                     )
                 )
@@ -61,16 +60,10 @@ fun AlbumListScreenNavigationGraph.navigation(
             deepLinks = deepLinks[AlbumListScreenNavigationDestination] ?: listOf(),
             windowSizeClass = windowSizeClass,
         )
-        AlbumViewScreenNavigationDestinationByIdentifier.composable(
+        AlbumViewScreenNavigationDestination.composable(
             this,
             navigateUp = navController::navigateUp,
-            deepLinks = deepLinks[AlbumViewScreenNavigationDestinationByIdentifier] ?: listOf(),
-            windowSizeClass = windowSizeClass,
-        )
-        AlbumViewScreenNavigationDestinationByName.composable(
-            this,
-            navigateUp = navController::navigateUp,
-            deepLinks = deepLinks[AlbumViewScreenNavigationDestinationByName] ?: listOf(),
+            deepLinks = deepLinks[AlbumViewScreenNavigationDestination] ?: listOf(),
             windowSizeClass = windowSizeClass,
         )
 //        AlbumViewScreenNavigationGraph.navigation(
@@ -81,8 +74,8 @@ fun AlbumListScreenNavigationGraph.navigation(
         AlbumInsertScreenNavigationDestination.composable(
             this, navigateUp = navController::navigateUp,
             navigateToAlbumById = {
-                AlbumViewScreenNavigationDestinationByIdentifier.route.navigateWith(
-                    navController, AlbumViewScreenNavigationDestinationByIdentifier.Parameters(
+                AlbumViewScreenNavigationDestination.route.navigateWith(
+                    navController, AlbumViewScreenNavigationDestination.Parameters(
                         it
                     )
                 ) {

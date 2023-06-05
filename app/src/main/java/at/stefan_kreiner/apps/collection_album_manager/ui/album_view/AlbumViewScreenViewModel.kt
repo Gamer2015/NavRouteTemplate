@@ -1,10 +1,10 @@
 package at.stefan_kreiner.apps.collection_album_manager.ui.album_view
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import at.stefan_kreiner.apps.collection_album_manager.data.CollectionAlbum
-import at.stefan_kreiner.apps.collection_album_manager.data.CollectionAlbumIdentifierType
 import at.stefan_kreiner.apps.collection_album_manager.data.CollectionAlbumItem
 import at.stefan_kreiner.apps.collection_album_manager.data.CollectionAlbumItemRepository
 import at.stefan_kreiner.apps.collection_album_manager.data.CollectionAlbumRepository
@@ -20,19 +20,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AlbumViewScreenViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val collectionAlbumRepository: CollectionAlbumRepository,
     private val collectionAlbumItemRepository: CollectionAlbumItemRepository,
 ) : ViewModel() {
-    fun uiStateByIdentifier(collectionAlbumIdentifier: CollectionAlbumIdentifierType): StateFlow<AlbumViewUiState> =
-        collectionAlbumRepository.getByIdentifierWithItems(collectionAlbumIdentifier)
-            .map<CollectionAlbum?, AlbumViewUiState>(
-                AlbumViewUiState::Success
-            ).catch { emit(AlbumViewUiState.Error(it)) }.stateIn(
-                viewModelScope, SharingStarted.WhileSubscribed(5000), AlbumViewUiState.Loading
-            )
+    private val itemId: Long = checkNotNull(
+        savedStateHandle[AlbumViewScreenNavigationDestination.itemIdArg.name]
+    )
 
-    fun uiStateByName(collectionAlbumName: String): StateFlow<AlbumViewUiState> =
-        collectionAlbumRepository.getByNameWithItems(collectionAlbumName)
+    val uiState: StateFlow<AlbumViewUiState> =
+        collectionAlbumRepository.getByIdentifierWithItems(itemId)
             .map<CollectionAlbum?, AlbumViewUiState>(
                 AlbumViewUiState::Success
             ).catch { emit(AlbumViewUiState.Error(it)) }.stateIn(
@@ -46,7 +43,7 @@ class AlbumViewScreenViewModel @Inject constructor(
     ): Job = viewModelScope.launch {
         Log.d("AlbumViewViewModel", "changeItems: album: ${album.name}")
         Log.d("AlbumViewViewModel", "changeItems: changedIndices: $changedIndices")
-        val albumItems = album.items ?: return@launch
+        val albumItems = album.items
 
         // Register callback with an API
         try {

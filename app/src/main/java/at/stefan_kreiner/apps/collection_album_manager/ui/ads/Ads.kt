@@ -1,7 +1,8 @@
-package at.stefan_kreiner.apps.collection_album_manager.ui.composables
+package at.stefan_kreiner.apps.collection_album_manager.ui.ads
 
 import android.content.Context
 import at.stefan_kreiner.apps.collection_album_manager.R
+import at.stefan_kreiner.apps.collection_album_manager.ui.composable.loadInterstitial
 
 private val TAG = "Ads"
 

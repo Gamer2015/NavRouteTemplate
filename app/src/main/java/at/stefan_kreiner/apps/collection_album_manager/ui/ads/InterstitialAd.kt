@@ -1,9 +1,10 @@
-package at.stefan_kreiner.apps.collection_album_manager.ui.composables
+package at.stefan_kreiner.apps.collection_album_manager.ui.composable
 
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.util.Log
+import at.stefan_kreiner.apps.collection_album_manager.ui.ads.AdUnitId
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
