@@ -27,10 +27,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.contentColorFor
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -41,14 +41,12 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import at.stefan_kreiner.apps.collection_album_manager.R
 import at.stefan_kreiner.apps.collection_album_manager.data.CollectionAlbum
 import at.stefan_kreiner.apps.collection_album_manager.data.CollectionAlbumIdentifierType
@@ -57,26 +55,29 @@ import at.stefan_kreiner.apps.collection_album_manager.ui.album_list.AlbumListSc
 import at.stefan_kreiner.apps.collection_album_manager.ui.album_list.AlbumListUiState
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlbumInsertScreen(
     navigateUp: (() -> Unit)?,
     navigateToAlbum: (CollectionAlbumIdentifierType) -> Unit,
-    lifecycle: Lifecycle = LocalLifecycleOwner.current.lifecycle,
+    windowSizeClass: WindowSizeClass,
+    modifier: Modifier = Modifier,
     viewModel: AlbumInsertScreenViewModel = hiltViewModel(),
     listScreenViewModel: AlbumListScreenViewModel = hiltViewModel(),
 ) {
-    val listScreenUiState by produceState<AlbumListUiState>(
-        initialValue = AlbumListUiState.Loading, key1 = lifecycle, key2 = viewModel
-    ) {
-        lifecycle.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
-            listScreenViewModel.uiState.collect { value = it }
-        }
-    }
+    val listScreenUiState by listScreenViewModel.uiState.collectAsStateWithLifecycle()
 
     when (listScreenUiState) {
-        is AlbumListUiState.Loading -> {}
-        is AlbumListUiState.Error -> {}
+        is AlbumListUiState.Loading -> AlbumInsertLoadingScreen(
+            windowSizeClass = windowSizeClass,
+            modifier = modifier,
+        )
+
+        is AlbumListUiState.Error -> AlbumInsertErrorScreen(
+            (listScreenUiState as AlbumListUiState.Error).throwable,
+            windowSizeClass = windowSizeClass,
+            modifier = modifier,
+        )
+
         is AlbumListUiState.Success -> {
             val data = (listScreenUiState as AlbumListUiState.Success).data
             AlbumInsertSuccessScreen(
@@ -84,9 +85,27 @@ fun AlbumInsertScreen(
                 navigateUp = navigateUp,
                 navigateToAlbum = navigateToAlbum,
                 viewModel = viewModel,
+                windowSizeClass = windowSizeClass,
+                modifier = modifier,
             )
         }
     }
+}
+
+@Composable
+fun AlbumInsertLoadingScreen(
+    windowSizeClass: WindowSizeClass,
+    modifier: Modifier = Modifier,
+) {
+
+}
+
+@Composable
+fun AlbumInsertErrorScreen(
+    throwable: Throwable,
+    windowSizeClass: WindowSizeClass,
+    modifier: Modifier = Modifier,
+) {
 }
 
 
@@ -96,6 +115,8 @@ fun AlbumInsertSuccessScreen(
     collections: List<CollectionAlbum>,
     navigateUp: (() -> Unit)?,
     navigateToAlbum: (CollectionAlbumIdentifierType) -> Unit,
+    windowSizeClass: WindowSizeClass,
+    modifier: Modifier = Modifier,
     viewModel: AlbumInsertScreenViewModel = hiltViewModel(),
 ) {
     val defaultCollectionName = stringResource(R.string.collection_name_input_default)

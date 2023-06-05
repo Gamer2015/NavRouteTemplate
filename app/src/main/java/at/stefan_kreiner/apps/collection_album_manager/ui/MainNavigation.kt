@@ -19,7 +19,13 @@ package at.stefan_kreiner.apps.collection_album_manager.ui
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavDeepLink
 import androidx.navigation.compose.NavHost
@@ -32,26 +38,42 @@ import com.example.collection_album_manager.ui.navigation.NavigationRoute
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainNavigation(
+    windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier,
     startDestination: NavigationRoute = MainScreenNavigationGraph.route,
     deepLinks: Map<NavigationDestination, List<NavDeepLink>> = mapOf(),
 ) {
     val navController = rememberNavController()
 
+    // Query for the current window size class
+    val widthSizeClass by rememberUpdatedState(windowSizeClass.widthSizeClass)
+
+    /**
+     * The index of the currently selected word, or `null` if none is selected
+     */
+    var selectedWordIndex: Int? by rememberSaveable { mutableStateOf(null) }
+
+    /**
+     * True if the detail is currently open. This is the primary control for "navigation".
+     */
+    var isDetailOpen by rememberSaveable { mutableStateOf(false) }
+
     Scaffold(modifier = modifier, bottomBar = {
-//        BottomAppBar {
-//            Row(
-//                modifier = Modifier.fillMaxWidth(),
-//                horizontalArrangement = Arrangement.SpaceEvenly,
-//                verticalAlignment = Alignment.CenterVertically,
-//            ) {
-//                IconButton(onClick = { /* Check onClick */ }) {
-//                    Icon(Icons.Filled.Home, contentDescription = "")
-//                }
-//                IconButton(onClick = { /* Edit onClick */ }) {
-//                    Icon(
-//                        Icons.Filled.Settings, contentDescription = ""
-//                    )
+//        if(windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact && windowSizeClass.heightSizeClass != WindowHeightSizeClass.Compact) {
+//            BottomAppBar {
+//                Row(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    horizontalArrangement = Arrangement.SpaceEvenly,
+//                    verticalAlignment = Alignment.CenterVertically,
+//                ) {
+//                    IconButton(onClick = { /* Check onClick */ }) {
+//                        Icon(Icons.Filled.Home, contentDescription = "")
+//                    }
+//                    IconButton(onClick = { /* Edit onClick */ }) {
+//                        Icon(
+//                            Icons.Filled.Settings, contentDescription = ""
+//                        )
+//                    }
 //                }
 //            }
 //        }
@@ -65,11 +87,7 @@ fun MainNavigation(
                 this,
                 navController = navController,
                 deepLinks = deepLinks,
-            )
-            MainScreenNavigationGraph.navigation(
-                this,
-                navController = navController,
-                deepLinks = deepLinks,
+                windowSizeClass = windowSizeClass,
             )
         }
     }

@@ -1,6 +1,7 @@
 package at.stefan_kreiner.apps.collection_album_manager.ui.album_list
 
 import android.util.Log
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.navigation.NavController
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
@@ -28,35 +29,49 @@ fun AlbumListScreenNavigationGraph.navigation(
     builder: NavGraphBuilder,
     navController: NavController,
     deepLinks: Map<NavigationDestination, List<NavDeepLink>>,
+    windowSizeClass: WindowSizeClass,
 ) {
-    Log.d("Navigation", "AlbumListScreenNavigationGraph called with backstack ${navController.backQueue}")
+    Log.d(
+        "Navigation",
+        "AlbumListScreenNavigationGraph called with backstack ${navController.backQueue}"
+    )
     navController.backQueue.forEach {
-        Log.d("Navigation", "AlbumListScreenNavigationGraph BackStack: " + it.destination.route.toString())
+        Log.d(
+            "Navigation",
+            "AlbumListScreenNavigationGraph BackStack: " + it.destination.route.toString()
+        )
     }
     builder.navigation(this) {
-        AlbumListScreenNavigationDestination.composable(this, navigateToAlbumInsert = {
-            AlbumInsertScreenNavigationDestination.route.navigateWith(
-                navController = navController,
-            )
-        }, navigateToAlbumViewByIdentifier = { itemId ->
-            Log.d("Navigation", "Item id: $itemId")
-            AlbumViewScreenNavigationDestinationByIdentifier.route.navigateWith(
-                navController = navController,
-                AlbumViewScreenNavigationDestinationByIdentifier.Parameters(
-                    itemId = itemId
+        AlbumListScreenNavigationDestination.composable(
+            this,
+            navigateToAlbumInsert = {
+                AlbumInsertScreenNavigationDestination.route.navigateWith(
+                    navController = navController,
                 )
-            )
-        }, deepLinks = deepLinks[AlbumListScreenNavigationDestination] ?: listOf()
+            },
+            navigateToAlbumViewByIdentifier = { itemId ->
+                Log.d("Navigation", "Item id: $itemId")
+                AlbumViewScreenNavigationDestinationByIdentifier.route.navigateWith(
+                    navController = navController,
+                    AlbumViewScreenNavigationDestinationByIdentifier.Parameters(
+                        itemId = itemId
+                    )
+                )
+            },
+            deepLinks = deepLinks[AlbumListScreenNavigationDestination] ?: listOf(),
+            windowSizeClass = windowSizeClass,
         )
         AlbumViewScreenNavigationDestinationByIdentifier.composable(
             this,
             navigateUp = navController::navigateUp,
-            deepLinks = deepLinks[AlbumViewScreenNavigationDestinationByIdentifier] ?: listOf()
+            deepLinks = deepLinks[AlbumViewScreenNavigationDestinationByIdentifier] ?: listOf(),
+            windowSizeClass = windowSizeClass,
         )
         AlbumViewScreenNavigationDestinationByName.composable(
             this,
             navigateUp = navController::navigateUp,
-            deepLinks = deepLinks[AlbumViewScreenNavigationDestinationByName] ?: listOf()
+            deepLinks = deepLinks[AlbumViewScreenNavigationDestinationByName] ?: listOf(),
+            windowSizeClass = windowSizeClass,
         )
 //        AlbumViewScreenNavigationGraph.navigation(
 //            this,
@@ -64,7 +79,8 @@ fun AlbumListScreenNavigationGraph.navigation(
 //            deepLinks = deepLinks,
 //        )
         AlbumInsertScreenNavigationDestination.composable(
-            this, navigateUp = navController::navigateUp, navigateToAlbumById = {
+            this, navigateUp = navController::navigateUp,
+            navigateToAlbumById = {
                 AlbumViewScreenNavigationDestinationByIdentifier.route.navigateWith(
                     navController, AlbumViewScreenNavigationDestinationByIdentifier.Parameters(
                         it
@@ -74,7 +90,9 @@ fun AlbumListScreenNavigationGraph.navigation(
                         inclusive = true
                     }
                 }
-            }, deepLinks = deepLinks[AlbumListScreenNavigationDestination] ?: listOf()
+            },
+            deepLinks = deepLinks[AlbumListScreenNavigationDestination] ?: listOf(),
+            windowSizeClass = windowSizeClass,
         )
     }
 }

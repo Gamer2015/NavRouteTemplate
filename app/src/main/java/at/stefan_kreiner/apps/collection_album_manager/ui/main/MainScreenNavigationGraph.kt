@@ -1,5 +1,6 @@
 package at.stefan_kreiner.apps.collection_album_manager.ui.main
 
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.navigation.NavController
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
@@ -22,12 +23,14 @@ fun MainScreenNavigationGraph.navigation(
     builder: NavGraphBuilder,
     navController: NavController,
     deepLinks: Map<NavigationDestination, List<NavDeepLink>>,
+    windowSizeClass: WindowSizeClass,
 ) {
     builder.navigation(this) {
         AlbumListScreenNavigationGraph.navigation(
             this,
             navController,
             deepLinks = deepLinks,
+            windowSizeClass = windowSizeClass,
         )
     }
 }

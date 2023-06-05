@@ -1,5 +1,6 @@
 package at.stefan_kreiner.apps.collection_album_manager.ui.album_insert
 
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import at.stefan_kreiner.apps.collection_album_manager.ui.navigation.NavigationDestination
@@ -19,6 +20,7 @@ fun AlbumInsertScreenNavigationDestination.composable(
     navigateUp: () -> Unit,
     navigateToAlbumById: (Long) -> Unit,
     deepLinks: List<NavDeepLink>,
+    windowSizeClass: WindowSizeClass,
 ) {
     builder.composable(
         destination = this,
@@ -26,7 +28,8 @@ fun AlbumInsertScreenNavigationDestination.composable(
     ) {
         AlbumInsertScreen(
             navigateUp = navigateUp,
-            navigateToAlbum = navigateToAlbumById
+            navigateToAlbum = navigateToAlbumById,
+            windowSizeClass = windowSizeClass,
         )
     }
 }

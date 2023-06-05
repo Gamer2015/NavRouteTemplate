@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2023 Stefan Kreiner
  * Copyright (C) 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +22,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -34,6 +38,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AdMobActivity(
 ) {
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -51,18 +56,25 @@ class MainActivity : AdMobActivity(
             ).setTagForUnderAgeOfConsent(false).build()
         )
         setContent {
-            App()
+            val windowSizeClass = calculateWindowSizeClass(this)
+            App(
+                windowSizeClass = windowSizeClass
+            )
         }
     }
 }
 
 @Composable
-fun App() {
+fun App(
+    windowSizeClass: WindowSizeClass,
+) {
     MyApplicationTheme {
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
-            MainNavigation()
+            MainNavigation(
+                windowSizeClass = windowSizeClass
+            )
         }
     }
 }

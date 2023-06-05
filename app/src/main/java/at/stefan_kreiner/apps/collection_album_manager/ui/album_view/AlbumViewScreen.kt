@@ -42,17 +42,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.contentColorFor
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -60,8 +59,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import at.stefan_kreiner.apps.collection_album_manager.R
 import at.stefan_kreiner.apps.collection_album_manager.data.CollectionAlbum
 import at.stefan_kreiner.apps.collection_album_manager.ui.composables.SearchView
@@ -70,75 +68,104 @@ import at.stefan_kreiner.apps.collection_album_manager.ui.composables.isScrollin
 import at.stefan_kreiner.apps.collection_album_manager.ui.composables.showInterstitial
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlbumViewScreenByIdentifier(
     albumId: Long,
     navigateUp: () -> Unit,
-    lifecycle: Lifecycle = LocalLifecycleOwner.current.lifecycle,
+    windowSizeClass: WindowSizeClass,
+    modifier: Modifier = Modifier,
     viewModel: AlbumViewScreenViewModel = hiltViewModel(),
 ) {
-    val uiStateFlow = viewModel.uiStateByIdentifier(albumId)
-    val uiState by produceState<AlbumViewUiState>(
-        initialValue = AlbumViewUiState.Loading, key1 = lifecycle, key2 = viewModel
-    ) {
-        lifecycle.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
-            uiStateFlow.collect { value = it }
-        }
-    }
+    val uiState by viewModel.uiStateByIdentifier(albumId).collectAsStateWithLifecycle()
 
+    AlbumViewScreenByUiState(
+        uiState = uiState,
+        navigateUp = navigateUp,
+        windowSizeClass = windowSizeClass,
+        modifier = modifier,
+        viewModel = viewModel,
+    )
+}
+
+@Composable
+fun AlbumViewScreenByName(
+    albumName: String,
+    navigateUp: () -> Unit,
+    windowSizeClass: WindowSizeClass,
+    modifier: Modifier = Modifier,
+    viewModel: AlbumViewScreenViewModel = hiltViewModel(),
+) {
+    val uiState by viewModel.uiStateByName(albumName).collectAsStateWithLifecycle()
+
+    AlbumViewScreenByUiState(
+        uiState = uiState,
+        navigateUp = navigateUp,
+        windowSizeClass = windowSizeClass,
+        modifier = modifier,
+        viewModel = viewModel,
+    )
+}
+
+@Composable
+fun AlbumViewScreenByUiState(
+    uiState: AlbumViewUiState,
+    navigateUp: () -> Unit,
+    windowSizeClass: WindowSizeClass,
+    modifier: Modifier = Modifier,
+    viewModel: AlbumViewScreenViewModel = hiltViewModel(),
+) {
     when (uiState) {
-        is AlbumViewUiState.Loading -> {}
-        is AlbumViewUiState.Error -> {}
+        is AlbumViewUiState.Loading -> AlbumViewLoadingScreen(
+            windowSizeClass = windowSizeClass,
+            modifier = modifier,
+        )
+
+        is AlbumViewUiState.Error -> AlbumViewErrorScreen(
+            throwable = uiState.throwable,
+            windowSizeClass = windowSizeClass,
+            modifier = modifier,
+        )
+
         is AlbumViewUiState.Success -> {
-            val data = (uiState as AlbumViewUiState.Success).data
+            val data = uiState.data
             if (data == null) {
-                AlbumViewSuccessScreenWithoutAlbum(navigateUp = navigateUp)
+                AlbumViewSuccessScreenWithoutAlbum(
+                    navigateUp = navigateUp,
+                    windowSizeClass = windowSizeClass,
+                    modifier = modifier,
+                )
             } else {
                 AlbumViewSuccessScreenWithAlbum(
                     album = data, navigateUp = navigateUp,
+                    windowSizeClass = windowSizeClass,
+                    modifier = modifier,
                 )
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AlbumViewScreenByName(
-    albumName: String,
-    navigateUp: () -> Unit,
-    lifecycle: Lifecycle = LocalLifecycleOwner.current.lifecycle,
-    viewModel: AlbumViewScreenViewModel = hiltViewModel(),
+fun AlbumViewLoadingScreen(
+    windowSizeClass: WindowSizeClass,
+    modifier: Modifier = Modifier,
 ) {
-    val uiStateFlow = viewModel.uiStateByName(albumName)
-    val uiState by produceState<AlbumViewUiState>(
-        initialValue = AlbumViewUiState.Loading, key1 = lifecycle, key2 = viewModel
-    ) {
-        lifecycle.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
-            uiStateFlow.collect { value = it }
-        }
-    }
 
-    when (uiState) {
-        is AlbumViewUiState.Loading -> {}
-        is AlbumViewUiState.Error -> {}
-        is AlbumViewUiState.Success -> {
-            val data = (uiState as AlbumViewUiState.Success).data
-            if (data == null) {
-                AlbumViewSuccessScreenWithoutAlbum(navigateUp = navigateUp)
-            } else {
-                AlbumViewSuccessScreenWithAlbum(
-                    album = data, navigateUp = navigateUp,
-                )
-            }
-        }
-    }
+}
+
+@Composable
+fun AlbumViewErrorScreen(
+    throwable: Throwable,
+    windowSizeClass: WindowSizeClass,
+    modifier: Modifier = Modifier,
+) {
 }
 
 @Composable
 fun AlbumViewSuccessScreenWithoutAlbum(
     navigateUp: () -> Unit,
+    windowSizeClass: WindowSizeClass,
+    modifier: Modifier = Modifier,
     viewModel: AlbumViewScreenViewModel = hiltViewModel(),
 ) {
     // AlbumInsertScreen(navigateUp = navigateUp, navigateToAlbum = {})
@@ -149,6 +176,8 @@ fun AlbumViewSuccessScreenWithoutAlbum(
 fun AlbumViewSuccessScreenWithAlbum(
     album: CollectionAlbum,
     navigateUp: () -> Unit,
+    windowSizeClass: WindowSizeClass,
+    modifier: Modifier = Modifier,
     viewModel: AlbumViewScreenViewModel = hiltViewModel(),
 ) {
     val TAG = "AlbumViewSuccessScreen"

@@ -1,6 +1,8 @@
 package at.stefan_kreiner.apps.collection_album_manager.ui.album_view
 
 import android.util.Log
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -28,10 +30,14 @@ fun AlbumViewScreenNavigationDestinationByName.composable(
     builder: NavGraphBuilder,
     navigateUp: () -> Unit,
     deepLinks: List<NavDeepLink>,
+    windowSizeClass: WindowSizeClass,
+    modifier: Modifier = Modifier,
 ) {
     Log.d("Navigation", "AlbumViewScreenNavigationDestinationByName Deep Links: $deepLinks")
     deepLinks.forEach {
-        Log.d("Navigation", "AlbumViewScreenNavigationDestinationByName Deep Link: ${it.uriPattern}")
+        Log.d(
+            "Navigation", "AlbumViewScreenNavigationDestinationByName Deep Link: ${it.uriPattern}"
+        )
     }
     builder.composable(
         destination = this,
@@ -40,11 +46,16 @@ fun AlbumViewScreenNavigationDestinationByName.composable(
         val parameters = AlbumViewScreenNavigationDestinationByName.Parameters(
             itemName = backStackEntry.arguments?.getString(itemNameArg.name)!!
         )
-        Log.d("Navigation", "AlbumViewScreenNavigationDestinationByName(itemName=${parameters.itemName})")
+        Log.d(
+            "Navigation",
+            "AlbumViewScreenNavigationDestinationByName(itemName=${parameters.itemName})"
+        )
 
         AlbumViewScreenByName(
             albumName = parameters.itemName,
             navigateUp = navigateUp,
+            windowSizeClass = windowSizeClass,
+            modifier = modifier,
         )
     }
 }
